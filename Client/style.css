@@ -1,0 +1,113 @@
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    /*font-family:"Lucida Console", "Courier New", monospace;*/
+    background-image: url("img.jpg");
+}
+
+.zivotinja{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.labela-zivotinja{
+    flex:1;
+}
+
+.zivotinja-status{
+    flex:4;
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.popuna{
+    background-color: aquamarine;
+    transition-duration: 2s;
+    border-radius: 10px;
+    transition-property:  color;
+}
+
+.zoovrt{
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 30px;
+    border: solid seagreen;
+    padding: 20px 10px 20px 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.podaci{
+    display: flex;
+    flex-direction: column;
+    flex:2;
+    padding-right: 50px;
+}
+
+.podaci-zivotinje{
+    display: flex;
+    flex-direction: column;
+    border: solid red;
+    padding: 20px 10px 20px 10px;
+    border-radius: 10px;
+}
+
+.podaci-direktor{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.forma{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+
+.naslov
+{
+    flex:1;
+}
+.zivotinje{
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+}
+
+.direktor
+{
+    display: flex;
+    flex-direction: row;
+}
+/* 
+.direktorPodaci
+{
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+} */
+
+.smena
+{
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+}
+
+.donja-forma{
+    display:flex;
+    flex-direction: column;
+    flex:1;
+    padding-top: 50px;
+}
+
+.gornja-forma
+{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding-top: 70px;
+}
