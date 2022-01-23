@@ -105,7 +105,8 @@ export class ZooloskiVrt{
          gornjaForma.appendChild(kolicinaInput);
  
          let dugme = document.createElement("button");
-         dugme.innerHTML = "Dodaj životinju";
+         dugme.innerHTML = "Dodaj/Izmeni životinju";
+         dugme.className = "dugme";
          dugme.onclick = (ev) => this.dodaj(zivotinje);
          gornjaForma.appendChild(dugme);
 
@@ -145,10 +146,9 @@ export class ZooloskiVrt{
 
         let dugmeS = document.createElement("button");
         dugmeS.innerHTML = "Smeni upravu";
+        dugmeS.className = "dugmeS";
         dugmeS.onclick = (ev) => this.klikSmeni();
         donjaForma.appendChild(dugmeS);
-
-        dugme.onclick = (ev) => this.klikSmeni();
 
 
         let zivotinje = document.createElement("div");
@@ -184,28 +184,33 @@ export class ZooloskiVrt{
 
     klikSmeni()
     {
-
-        let idKogBrisem = this.container.querySelector(".selekt-ime").value;
-        for(let i = 0;i<this.direktor.length;i++){
-            if(this.direktor[i].direktorId == idKogBrisem){
-                this.direktor.splice(i,1);
+        if(this.direktor.length > 0)
+        {
+            let idKogBrisem = this.container.querySelector(".selekt-ime").value;
+            for(let i = 0;i<this.direktor.length;i++){
+                if(this.direktor[i].direktorId == idKogBrisem){
+                    this.direktor.splice(i,1);
+                }
             }
+            fetch("https://localhost:5001/ZooloskiVrt/brisiDirektora/" + idKogBrisem,{
+                method:"DELETE"
+            }).then(res=>res.text())
+                .then(res=> alert("Direktor je obrisan!"));
+    
+            let podaciDirektor = this.container.querySelector(".podaci-direktor");
+            podaciDirektor.innerHTML = '';
+    
+            let labelauprava = document.createElement("h3");
+            labelauprava.innerHTML= "Uprava: ";
+            podaciDirektor.appendChild(labelauprava);
+    
+            this.direktor.forEach((dir, index)=>{
+                dir.crtajDirektora(podaciDirektor);
+            });
+        }else{
+            alert("Ne postoji direktor za brisanje!");
         }
-        fetch("https://localhost:5001/ZooloskiVrt/brisiDirektora/" + idKogBrisem,{
-            method:"DELETE"
-        }).then(res=>res.text())
-            .then(res=> alert("Direktor je obrisan!"));
 
-        let podaciDirektor = this.container.querySelector(".podaci-direktor");
-        podaciDirektor.innerHTML = '';
-
-        let labelauprava = document.createElement("h3");
-        labelauprava.innerHTML= "Uprava: ";
-        podaciDirektor.appendChild(labelauprava);
-
-        this.direktor.forEach((dir, index)=>{
-            dir.crtajDirektora(podaciDirektor);
-        });
     }
 
     dodaj(gdeDaCrtam){
@@ -244,7 +249,30 @@ export class ZooloskiVrt{
         });
         }
         else{
-            alert("Zadata vrsta vec postoji!");
+            let idZivotinje = postoji.zivotinjaId;
+            if(Number(postoji.trenutnaKolicina) + Number(kolicina) <= this.kapacitet){
+                postoji.trenutnaKolicina =
+                     (Number(kolicina) + Number(postoji.trenutnaKolicina)).toString();
+                
+            fetch("https://localhost:5001/ZooloskiVrt/dodajKolicinu/"+ idZivotinje + "/" + kolicina.toString(),{
+                method:"PUT"
+            }).then(resp=>{
+                if(resp.ok){
+                    alert("Azurirana je kolicina za " + postoji.imeVrste);
+                    let popune = this.container.querySelectorAll(".popuna");
+                    let labele = this.container.querySelectorAll(".labela-zivotinja");
+
+                    this.zivotinje.forEach((z, index)=>{
+                        labele[index].innerHTML = z.imeVrste + 
+                            " - " + z.trenutnaKolicina + ": ";
+                        popune[index].style.flexGrow = parseInt(z.trenutnaKolicina)/this.kapacitet;
+                    });
+                }
+            })
+            }else{
+                alert("Nema vise mesta za dodavaje!");
+            }
+ 
         }   
     }
 }

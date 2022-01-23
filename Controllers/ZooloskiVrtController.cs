@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -41,8 +42,28 @@ namespace ZooVrt.Controllers
 
                 Db.SaveChanges();
 
+            }else{
+                throw new Exception("Nije pronadjen Zoo vrt gde bi dodali zivotinju!");
             }
 
+        }
+
+
+        [HttpPut]
+        [Route ("dodajKolicinu/{id}/{kolicina}")]
+        public IEnumerable<Zivotinja> Put (int id, int kolicina)
+        {
+            var z = Db.Zivotinje.Find(id);
+            if (z != null)
+            {
+                z.TrenutnaKolicina = (kolicina + Int32.Parse(z.TrenutnaKolicina)).ToString();
+                Db.Update(z);
+
+                Db.SaveChanges();
+            }else{
+                throw new Exception("Nije pronadjena zivotinja kojoj zelimo da azuriramo kolicinu!");
+            }
+            return Db.Zivotinje.ToArray();
         }
 
         [HttpDelete]
@@ -53,6 +74,8 @@ namespace ZooVrt.Controllers
             if(direktor!=null){
                 Db.Remove(direktor);
                 Db.SaveChanges();
+            }else{
+                throw new Exception("Nije pronadjen direktor za brisanje!");
             }
         }
     }
